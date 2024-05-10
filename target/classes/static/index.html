@@ -1,0 +1,27 @@
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="/index.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+<div class="landing">
+    <div class="title"><img src="search_engine.svg" width="100%"></div>
+    <form id="search-bar" action="/search" method="POST">
+        <input id="search-query" name="search-query" type="text" placeholder="Enter query..." />
+        <input type="submit" value="SEARCH!"/>
+    </form>
+</div>
+<div class="header" style="display:none">
+    <div class="title-header"><img src="search_engine.svg" style="max-width: 100%; height:auto;"></div>
+    <form id="search-bar-header" action="/search" method="POST">
+        <input id="search-query-header" name="search-query-header" type="text" placeholder="Enter query..." />
+        <input type="submit" value="SEARCH!"/>
+    </form>
+</div>
+<div id='results' style='display:none;'>Retrieving Results...</div>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
