@@ -11,6 +11,9 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 public class Scoring {
+    /*
+        Get maximum frequency in the whole document for max(tf)
+     */
     public int getMaxFrequency(BTree forwardIndex) throws Exception {
         int maxFrequency = Integer.MIN_VALUE;
         TupleBrowser browser = forwardIndex.browse();
@@ -25,6 +28,9 @@ public class Scoring {
         return maxFrequency;
     }
 
+    /*
+        Calculate word weights for term and title for all documents
+     */
     public void storeWeights(DocumentDB db, BTree forwardIndex, BTree invertedIndex, BTree weights) throws Exception {
         int size = forwardIndex.size();
         int maxFrequency = getMaxFrequency(forwardIndex);
@@ -45,7 +51,9 @@ public class Scoring {
             weights.insert(rec.getKey(), listWeights, true);
         }
     }
-
+    /*
+        call storeWeights function to calculate term weights and title weights
+     */
     public void calculateWeights() throws Exception {
         DocumentDB db = new DocumentDB();
 
@@ -62,10 +70,20 @@ public class Scoring {
         db.closeDB();
     }
 
+    /*
+        Formula for calculating the cosine similarity
+     */
     private double cosineSimiliarity(double documentLength, double queryLength, double weight) {
         return weight / (documentLength * queryLength);
     }
 
+    /*
+        Check whether the phrase exists in the document.
+        Stores all position of each word in the phrase inside the phrasePositions vector.
+        Then, check whether the words are consecutive by running the for loop for the phrasePositions.get(0).
+        Check whether phrasePositions.get(j) contains (phrasePositions.get(0).get(i) + j)
+        ex) 0=[0, 5, 11] 1=[1, 7, 10] 2=[2, 8 12] => true (check 0 + 1 = 1, 0 + 2 = 2)
+     */
     private boolean isPhrase(int pageID, BTree invertedIndex, Vector<String> phrase) throws IOException {
         LinkedHashMap<Integer, Vector<Integer>> phrasePositions = new LinkedHashMap<>();
         for (int i = 0; i < phrase.size(); i++) {
@@ -73,12 +91,11 @@ public class Scoring {
             Vector<Integer> positionList = idList.get(pageID);
             phrasePositions.put(i, positionList);
         }
-
         for (int i = 0; i < phrasePositions.get(0).size(); i++) {
             boolean isConsecutive = true;
             int currentPos = phrasePositions.get(0).get(i);
             for (int j = 1; j < phrase.size(); j++) {
-                if (!phrasePositions.get(j).contains(currentPos + i)) {
+                if (!phrasePositions.get(j).contains(currentPos + j)) {
                     isConsecutive = false;
                     break;
                 }
@@ -88,7 +105,10 @@ public class Scoring {
         return false;
     }
 
-    private double getDocumentLength(int pageID, HashMap<String, Integer> frequency) {
+    /*
+        Document length is calculated by adding up all sqrt(frequency ^ 2)
+     */
+    private double getDocumentLength(HashMap<String, Integer> frequency) {
         double length = 0.0;
         for (Map.Entry<String, Integer> entry : frequency.entrySet()) {
             length += (double) pow(entry.getValue(), 2);
@@ -98,7 +118,7 @@ public class Scoring {
 
     /* Phrase is a must + word is preferable
         1. Filter out documents that do not contain phrase
-        2. Give more points if the document contains words
+        2. Add more scores if the document contains words by calculating cosine similarity
      */
     private LinkedHashMap<Integer, Double> calculateSimilarity(DocumentDB db, HashMap<Integer, Vector<String>> query, BTree weights, BTree invertedIndex, BTree forwardIndex) throws Exception {
         LinkedHashMap<Integer, Double> score = new LinkedHashMap<>();
@@ -136,7 +156,7 @@ public class Scoring {
                 if (allContained && isPhrase((Integer) rec.getKey(), invertedIndex, phrase)) {
                     score.put((Integer) rec.getKey(), 0.0);
                     HashMap<String, Integer> frequency = (HashMap<String, Integer>) forwardIndex.find(rec.getKey());
-                    double documentLength = getDocumentLength((Integer) rec.getKey(), frequency);
+                    double documentLength = getDocumentLength(frequency);
                     if (wordIDs != null && !wordIDs.isEmpty()) {
                         for (int i = 0; i < wordIDs.size(); i++) {
                             if (wordWeights.containsKey(wordIDs.get(i))) {
@@ -149,7 +169,7 @@ public class Scoring {
                 }
             } else {
                 HashMap<String, Integer> frequency = (HashMap<String, Integer>) forwardIndex.find(rec.getKey());
-                double documentLength = getDocumentLength((Integer) rec.getKey(), frequency);
+                double documentLength = getDocumentLength(frequency);
                 if (wordIDs != null && !wordIDs.isEmpty()) {
                     for (int i = 0; i < wordIDs.size(); i++) {
                         if (wordWeights.containsKey(wordIDs.get(i))) {
@@ -165,8 +185,8 @@ public class Scoring {
     }
 
     /*
-        1. parse query into phrase + word
-        2. Stem if query is stopword
+        1. Parse the query into phrase + word (0: phrase, 1: word)
+        2. Remove the query if stopword; otherwise, stem it to root word
     */
     private HashMap<Integer, Vector<String>> parseQuery(String query) {
         HashMap<Integer, Vector<String>> parsedQuery = new HashMap<>();
@@ -182,7 +202,7 @@ public class Scoring {
             for (int i = 0; i < tokens.length; i++) {
                 String token = tokens[i].trim();
                 if (!token.isBlank() && !token.isEmpty() && !stopStem.isStopWord(token)) {
-                    String stemPhrase = stopStem.stem(token);
+                    String stemPhrase = stopStem.stem(token.toLowerCase());
                     parsedPhrase.add(stemPhrase);
                 }
             }
@@ -194,7 +214,7 @@ public class Scoring {
             for (int i = 0; i < wordTokens.length; i++) {
                 String token = wordTokens[i].trim();
                 if (!token.isBlank() && !token.isEmpty() && !stopStem.isStopWord(token)) {
-                    String stemWord = stopStem.stem(token);
+                    String stemWord = stopStem.stem(token.toLowerCase());
                     parsedWords.add(stemWord);
                 }
             }
@@ -205,7 +225,7 @@ public class Scoring {
             for (int i = 0; i < tokens.length; i++) {
                 String token = tokens[i].trim();
                 if (!token.isBlank() && !token.isEmpty() && !stopStem.isStopWord(token)) {
-                    String stemWord = stopStem.stem(token);
+                    String stemWord = stopStem.stem(token.toLowerCase());
                     parsedWords.add(stemWord);
                 }
             }
@@ -214,12 +234,13 @@ public class Scoring {
         return parsedQuery;
     }
 
-    public void score(String query) throws Exception {
-        if (query.isEmpty() || query.isBlank()) return;
+    /*
+        Run the whole process for query and page ranking
+     */
+    public LinkedHashMap<Integer, Double> score(String query) throws Exception {
+        if (query.isEmpty() || query.isBlank()) return null;
 
         DocumentDB db = new DocumentDB();
-
-        BTree pageRank = db.getTable("pageRank");
         BTree termWeights = db.getTable("termWeights");
         BTree titleWeights = db.getTable("titleWeights");
         BTree invertedIndexBody = db.getTable("invertedIndexBody");
@@ -247,16 +268,7 @@ public class Scoring {
         LinkedHashMap<Integer, Double> sortedScore = new LinkedHashMap<>();
         entryList.forEach(entry -> sortedScore.put(entry.getKey(), entry.getValue()));
 
-        int rank = 0;
-        for (Map.Entry<Integer, Double> entry : sortedScore.entrySet()) {
-            HashMap<Integer, Double> result = new HashMap<>();
-            result.put(entry.getKey(), entry.getValue());
-            if (pageRank.size() < 50) {
-                pageRank.insert(rank, result, true);
-            }
-            rank++;
-        }
-
         db.closeDB();
+        return sortedScore;
     }
 }

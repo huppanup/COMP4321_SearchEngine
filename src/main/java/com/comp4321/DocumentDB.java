@@ -27,8 +27,7 @@ public class DocumentDB {
                     "forwardIndexBody",
                     "forwardIndexTitle",
                     "termWeights",
-                    "titleWeights",
-                    "pageRank"};
+                    "titleWeights"};
             String[] StringToObj = {
                     "URLToID",
                     "WordToID",

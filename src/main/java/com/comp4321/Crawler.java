@@ -6,9 +6,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import jdbm.btree.BTree;
-import jdbm.helper.Tuple;
-import jdbm.helper.TupleBrowser;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.beans.LinkBean;
 import org.jsoup.Jsoup;
@@ -193,9 +190,13 @@ public class Crawler
 
 	public void crawl() throws Exception {
 		try {
-			for (int i = 0; urlQueue.size() > i && maxIter != 0; i++) this.fetchPage(this.urlQueue.get(i));
+			boolean updated = false;
+			for (int i = 0; urlQueue.size() > i && maxIter != 0; i++) {
+				this.fetchPage(this.urlQueue.get(i));
+				if (i > 0) updated = true;
+			}
 			db.closeDB();
-			score.calculateWeights();
+			if (updated) score.calculateWeights();
 		} catch (Exception e) {
 			db.closeDB();
 			e.printStackTrace ();

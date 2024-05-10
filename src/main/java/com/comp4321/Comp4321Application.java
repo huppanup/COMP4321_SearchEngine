@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class Comp4321Application {
 
 	@PostMapping("/search")
 	@ResponseBody
-	public String handleQuery(@RequestBody String query){
+	public ResponseEntity<?> handleQuery(@RequestBody String query){
 		HashMap<String,String> result;
 		try {
 			Crawler crawler = new Crawler(
@@ -37,13 +38,14 @@ public class Comp4321Application {
 			Scoring score = new Scoring();
 			score.score(query);
 
+
 			result = SearchResult.getResults(50);
-			return result.toString();
+			return ResponseEntity.ok(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = new HashMap<>();
 			result.put("success","false");
-			return result.toString();
+			return ResponseEntity.ok(result);
 		}
 	}
 

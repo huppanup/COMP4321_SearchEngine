@@ -19,7 +19,54 @@
         <input type="submit" value="SEARCH!"/>
     </form>
 </div>
-<div id='results' style='display:none;'>Retrieving Results...</div>
+<div id='results' style='display:none;'>
+    <table id="results-list">
+        <thead>
+        <tr id="head-row">
+            <th class="rank">Rank</th>
+            <th class="score">Score</th>
+            <th class="page">Page</th>
+        </tr>
+        </thead>
+        <tbody>
+
+<!--        <tr key={file.data.filename}>-->
+<!--            <td className="cloud-checkbox-td">-->
+<!--                <input-->
+<!--                        type="checkbox"-->
+<!--                        checked={checkedItems[file.data.filename] || false}-->
+<!--                        disabled={isAdmin !== 1 || file.data.isFolder}-->
+<!--                        onChange={(e) => handleCheckBox(e, file.data.filename)}-->
+<!--                className="cloud-checkbox"-->
+<!--                />-->
+<!--            </td>-->
+<!--            {file.data.isFolder ? (-->
+<!--            <td>-->
+<!--                <a href="#" onClick={() => handleFolderClick(file.data.fileURL)}-->
+<!--                style={{color: "black", textDecoration: "underline"}}>-->
+<!--                <FaFolder size={15} className="cloud-folder" />-->
+<!--                {file.data.filename}-->
+<!--                </a>-->
+<!--            </td>-->
+<!--            ) : (-->
+<!--            <td>-->
+<!--                <a href={file.data.fileURL} target="_blank" style={{color: "black", textDecoration: "underline"}}>-->
+<!--                <FaFile size={15} /> {file.data.filename}-->
+<!--                </a>-->
+<!--            </td>-->
+<!--            )}-->
+<!--            <td>-->
+<!--                {file.data.timestamp !== "-" ? new Date(file.data.timestamp).toISOString().split("T")[0] : "-"}-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                {file.data.size !== "-" ? changeBytes(file.data.size) : "-"}-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        ))}-->
+
+        </tbody>
+    </table>
+</div>
 </div>
 
 <script src="index.js"></script>
