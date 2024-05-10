@@ -7,9 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.util.Assert;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Vector;
+import java.util.*;
 
 @SpringBootTest
 class Comp4321ApplicationTests {
@@ -101,7 +99,16 @@ class Comp4321ApplicationTests {
 	public void testScoring() {
 		try {
 			DocumentDB db = new DocumentDB();
+			Scoring score = new Scoring();
 
+			LinkedHashMap<Integer, Double> scoreResult = score.score("\"computer science\" major admission");
+			Map.Entry<Integer, Double> firstEntry = scoreResult.entrySet().iterator().next();
+			Integer firstKey = firstEntry.getKey();
+			Double firstValue = firstEntry.getValue();
+
+			Assertions.assertEquals(5, firstKey);
+			Assertions.assertTrue(firstValue > 0.0);
+			Assertions.assertTrue(!scoreResult.containsKey(13));
 
 			db.closeDB();
 		} catch (Exception e) {
