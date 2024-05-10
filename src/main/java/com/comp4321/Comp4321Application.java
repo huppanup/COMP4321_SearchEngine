@@ -2,7 +2,6 @@ package com.comp4321;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +35,6 @@ public class Comp4321Application {
 
 			Scoring score = new Scoring();
 			score.score(query);
-
 			result = SearchResult.getResults(50);
 			return result.toString();
 		} catch (Exception e) {
