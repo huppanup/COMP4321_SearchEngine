@@ -265,11 +265,12 @@ public class Scoring {
         entryList.sort(Comparator.comparing(Map.Entry::getValue));
         Collections.reverse(entryList);
 
+        // Rank, Id, score
         LinkedHashMap<Integer, Double> sortedScore = new LinkedHashMap<>();
-        entryList.forEach(entry -> sortedScore.put(entry.getKey(), entry.getValue()));
 
-        System.out.println(sortedScore);
-
+        entryList.forEach(entry -> {
+            sortedScore.put(entry.getKey(), entry.getValue());
+        });
         db.closeDB();
         return sortedScore;
     }
