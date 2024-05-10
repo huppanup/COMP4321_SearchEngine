@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 @SpringBootApplication
 @RestController
@@ -26,7 +27,6 @@ public class Comp4321Application {
 	@PostMapping("/search")
 	@ResponseBody
 	public ResponseEntity<?> handleQuery(@RequestBody String query){
-		HashMap<String,String> result;
 		try {
 			Crawler crawler = new Crawler(
 					"https://www.cse.ust.hk/~kwtleung/COMP4321/testpage.htm",
@@ -35,12 +35,11 @@ public class Comp4321Application {
 			crawler.crawl();
 
 			Scoring score = new Scoring();
-			score.score(query);
-			result = SearchResult.getResults(50);
+			HashMap<Integer, HashMap<Integer, Double>> result = score.score(query);
 			return ResponseEntity.ok(result);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result = new HashMap<>();
+			HashMap<String, String> result = new HashMap<>();
 			result.put("success","false");
 			return ResponseEntity.ok(result);
 		}

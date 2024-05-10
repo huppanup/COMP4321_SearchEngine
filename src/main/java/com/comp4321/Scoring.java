@@ -237,7 +237,7 @@ public class Scoring {
     /*
         Run the whole process for query and page ranking
      */
-    public LinkedHashMap<Integer, Double> score(String query) throws Exception {
+    public HashMap<Integer, HashMap<Integer, Double>> score(String query) throws Exception {
         if (query.isEmpty() || query.isBlank()) return null;
 
         DocumentDB db = new DocumentDB();
@@ -265,8 +265,14 @@ public class Scoring {
         entryList.sort(Comparator.comparing(Map.Entry::getValue));
         Collections.reverse(entryList);
 
-        LinkedHashMap<Integer, Double> sortedScore = new LinkedHashMap<>();
-        entryList.forEach(entry -> sortedScore.put(entry.getKey(), entry.getValue()));
+        // Rank, Id, score
+        HashMap<Integer, HashMap<Integer, Double>> sortedScore = new HashMap<>();
+        for (int index = 0; index < 50; index++){
+            if(index >= entryList.size()){break;}
+            HashMap<Integer,Double> temp = new HashMap<>();
+            temp.put(entryList.get(index).getKey(), entryList.get(index).getValue());
+            sortedScore.put(index, temp);
+        }
 
         db.closeDB();
         return sortedScore;
