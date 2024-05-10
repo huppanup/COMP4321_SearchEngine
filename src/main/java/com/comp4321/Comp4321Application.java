@@ -35,7 +35,7 @@ public class Comp4321Application {
 			crawler.crawl();
 
 			Scoring score = new Scoring();
-			HashMap<Integer, HashMap<Integer, Double>> result = score.score(query);
+			LinkedHashMap<Integer, Double> result = score.score(query.substring(1, query.length() - 1));
 			return ResponseEntity.ok(result);
 		} catch (Exception e) {
 			e.printStackTrace();

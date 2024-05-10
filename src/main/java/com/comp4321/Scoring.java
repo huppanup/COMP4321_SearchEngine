@@ -192,11 +192,11 @@ public class Scoring {
         HashMap<Integer, Vector<String>> parsedQuery = new HashMap<>();
         StopStem stopStem = new StopStem("stopwords.txt");
 
-        int startIndex = query.indexOf('"'); // Find the first quotation mark
-        int endIndex = query.indexOf('"', startIndex + 1); // Find the closing quotation mark
+        int startIndex = query.indexOf("\""); // Find the first quotation mark
+        int endIndex = query.indexOf("\"", startIndex + 1); // Find the closing quotation mark
 
         if (startIndex != -1 && endIndex != -1) {
-            String phrase = query.substring(startIndex + 1, endIndex);
+            String phrase = query.substring(startIndex + 1, endIndex - 1);
             String[] tokens = phrase.split(" ");
             Vector<String> parsedPhrase = new Vector<>();
             for (int i = 0; i < tokens.length; i++) {
@@ -208,7 +208,7 @@ public class Scoring {
             }
             parsedQuery.put(0, parsedPhrase);
 
-            String newQuery = query.replace("\"" + phrase + "\"", "");
+            String newQuery = query.substring(endIndex + 1).trim();
             String[] wordTokens = newQuery.split(" ");
             Vector<String> parsedWords = new Vector<>();
             for (int i = 0; i < wordTokens.length; i++) {
@@ -237,7 +237,7 @@ public class Scoring {
     /*
         Run the whole process for query and page ranking
      */
-    public HashMap<Integer, HashMap<Integer, Double>> score(String query) throws Exception {
+    public LinkedHashMap<Integer, Double> score(String query) throws Exception {
         if (query.isEmpty() || query.isBlank()) return null;
 
         DocumentDB db = new DocumentDB();
@@ -265,14 +265,10 @@ public class Scoring {
         entryList.sort(Comparator.comparing(Map.Entry::getValue));
         Collections.reverse(entryList);
 
-        // Rank, Id, score
-        HashMap<Integer, HashMap<Integer, Double>> sortedScore = new HashMap<>();
-        for (int index = 0; index < 50; index++){
-            if(index >= entryList.size()){break;}
-            HashMap<Integer,Double> temp = new HashMap<>();
-            temp.put(entryList.get(index).getKey(), entryList.get(index).getValue());
-            sortedScore.put(index, temp);
-        }
+        LinkedHashMap<Integer, Double> sortedScore = new LinkedHashMap<>();
+        entryList.forEach(entry -> sortedScore.put(entry.getKey(), entry.getValue()));
+
+        System.out.println(sortedScore);
 
         db.closeDB();
         return sortedScore;
