@@ -2,8 +2,6 @@
   <library name="htmlparser">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/src/main/java/com/comp4321/htmlparser.jar!/" />
-      <root url="jar://$PROJECT_DIR$/src/main/java/com/comp4321/jdbm-1.0.jar!/" />
-      <root url="jar://$PROJECT_DIR$/src/main/java/com/comp4321/jsoup-1.17.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
