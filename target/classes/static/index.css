@@ -122,6 +122,7 @@ table thead tr th {
     position: sticky;
     background-color: white;
     top: 0;
+    color: #003366;
 }
 
 #results-list {

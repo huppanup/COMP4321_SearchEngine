@@ -14,6 +14,16 @@ import java.util.HashMap;
 public class Comp4321Application {
 
 	public static void main(String[] args) {
+		System.out.println("Crawling...");
+		try{
+			Crawler crawler = new Crawler(
+					"https://www.cse.ust.hk/~kwtleung/COMP4321/testpage.htm",
+					300,
+					"stopwords.txt");
+			crawler.crawl();
+		}catch(Exception e){
+			System.out.println(e);
+		}
 		SpringApplication.run(Comp4321Application.class, args);
 	}
 
@@ -26,13 +36,8 @@ public class Comp4321Application {
 	@PostMapping("/search")
 	@ResponseBody
 	public ResponseEntity<?> handleQuery(@RequestBody String query){
+		System.out.println("Searching for query...");
 		try {
-			Crawler crawler = new Crawler(
-					"https://www.cse.ust.hk/~kwtleung/COMP4321/testpage.htm",
-					300,
-					"stopwords.txt");
-			crawler.crawl();
-
 			Scoring score = new Scoring();
 
 			HashMap<Integer, HashMap<String, String>> result =

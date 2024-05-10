@@ -27,7 +27,7 @@ public class SearchResult {
             int id = entry.getKey();
             HashMap<String, String> pageInfo = new HashMap<>();
             // Get score
-            pageInfo.put("score", String.format("%e", entry.getValue()));
+            pageInfo.put("score", String.format("%.2e", entry.getValue()));
 
             // Get URL
             pageInfo.put("url", (String) IDToURL.find(id));
@@ -74,8 +74,9 @@ public class SearchResult {
             // Get Child URL
             String childURLString = "";
             Vector<String> childLinks = (Vector<String>) ParentToChild.find(id);
+            System.out.println(childLinks.toString());
             for(String child: childLinks){
-                parentURLString += child + ", ";
+                childURLString += child + ", ";
             }
             if (childURLString.length() > 2) {
                 childURLString = childURLString.substring(0, childURLString.length() - 2);

@@ -7,16 +7,6 @@ $("#search-bar").on("submit", (e) => {
         $("#results").fadeIn(300);
     }, 300);
 
-    for (let n = 20; n > 0; n--){
-        $("tbody").append(`
-            <tr key=${n}>
-            <td class="rank">${n}</td>
-            <td class="score">0.1423</td>
-            <td class="page">HKUST COMPUTER SCIENCE</td>
-            </tr>
-        `);
-    }
-
     // Get the input fields
     const query = $("#search-query").val().trim();
     fetch('/search', {
@@ -27,13 +17,22 @@ $("#search-bar").on("submit", (e) => {
         body: JSON.stringify(query)
     })
         .then(response => {
-            console.log(response);
             return response.json();
         })
         .then(data => {
         // Handle the response data
-        console.log(data);
-        //$("#results").text(data);
+        if ("success" in data){console.log("Error while searching."); return;}
+        $("tbody").html("");
+        for (rank in data){
+            if (rank == 50) break;
+            $("tbody").append(`
+            <tr key=${rank}>
+            <td class="rank">${parseInt(rank)+1}</td>
+            <td class="score">${data[rank].score}</td>
+            <td class="page">${data[rank].title}</td>
+            </tr>
+        `);
+        }
     })
         .catch(error => {
         // Handle any error that occurred during the request
@@ -42,4 +41,37 @@ $("#search-bar").on("submit", (e) => {
     console.log(query);
 });
 
-$("#search-bar-header").on("submit", (e) => {});
+$("#search-bar-header").on("submit", (e) => {
+    e.preventDefault();
+    const query = $("#search-query-header").val().trim();
+    fetch('/search', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(query)
+    })
+        .then(response => {
+        console.log(response);
+        return response.json();
+    })
+        .then(data => {
+        // Handle the response data
+        if ("success" in data){console.log("Error while searching."); return;}
+        $("tbody").html("");
+        for (rank in data){
+            if (rank == 50) break;
+            $("tbody").append(`
+            <tr key=${rank}>
+            <td class="rank">${parseInt(rank)+1}</td>
+            <td class="score">${data[rank].score}</td>
+            <td class="page">${data[rank].title}</td>
+            </tr>
+        `);
+        }
+    })
+        .catch(error => {
+        // Handle any error that occurred during the request
+        console.error(error);
+    });
+});
