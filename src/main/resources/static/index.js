@@ -61,7 +61,7 @@ async function getKeywords(){
 }
 
 const HistoryQueue = (function(){
-    const max = 20;
+    const max = 10;
 
     const addHistory = function(query){
         const history = $('#history-list');

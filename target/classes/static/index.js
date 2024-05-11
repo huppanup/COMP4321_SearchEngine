@@ -24,6 +24,9 @@ function setKeywordsHeader(){
 }
 
 function showKeywords(startChar){
+    if($(`.keyword-item`).children().length > 0){
+        $(`.keyword-item`).off('click');
+    }
     $('#keywords').html("");
     for(const keyword of keywords[startChar]){
         $('#keywords').append(`<button class="keyword-item">${keyword}</button>`);
@@ -58,7 +61,7 @@ async function getKeywords(){
 }
 
 const HistoryQueue = (function(){
-    const max = 20;
+    const max = 10;
 
     const addHistory = function(query){
         const history = $('#history-list');
@@ -78,6 +81,7 @@ const HistoryQueue = (function(){
 })();
 
 async function search(query){
+
     if (query.length === 0 && $("#index").children().length == 0) return;
     if (query.length !== 0) HistoryQueue.addHistory(query);
     if ($("#index").children().length > 0){
@@ -87,6 +91,8 @@ async function search(query){
         query += " " + values.join(' ');
     }
     query.trim();
+    $("#hideIndex").hide();
+    $("#viewIndex").show();
     $("#results-list").show();
     $("#keywords-list").hide();
     const result = await fetch('/search', {
