@@ -21,7 +21,7 @@ body{
     margin: 0;
     box-sizing: border-box;
 }
-
+/* Landing Page */
 .landing{
     width: 50%; height: 30%;
     margin: auto;
@@ -38,6 +38,26 @@ body{
     font-weight: bolder;
 }
 
+#search-bar{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Search Page */
+
+#results{
+    width: 100%; height: 85%;
+    margin: none;
+    display:flex;
+    flex-direction:row;
+    gap: 30px;
+    box-sizing: border-box;
+    flex: 1;
+}
+
+/* Header */
 .title-header{
     width:30%;
     display:flex;
@@ -87,13 +107,6 @@ input[type="submit"]:hover{
     background-color: #004993;
 }
 
-#search-bar{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-}
-
 #search-bar-header{
     display: flex;
     flex-direction: row;
@@ -127,89 +140,20 @@ input[type="submit"]:hover{
     color: black
 }
 
-/* Table Stuff */
-
-#results{
-    width: 100%; height: 85%;
+/* Search Table */
+#results-container{
     margin: none;
     display:flex;
     flex-direction:row;
-    gap: 30px;
-    box-sizing: border-box;
     flex: 1;
 }
 
-#results-container{
+#results-search{
     margin: none;
     display:flex;
     flex-direction:row;
     overflow-y: scroll;
     flex: 1;
-}
-
-#bonus{
-    width: 20%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-button{
-    align-self: center;
-    justify-self: center;
-    width : 80%;
-    border-radius: 15px;
-    height: 40px;
-    color: white;
-    border: none;
-    background-color: #003366;
-}
-
-#history{
-    width: 100%;
-    border: 1px solid #003366;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    border-radius: 25px;
-    padding: 20px;
-    flex: 0 0 auto;
-    height: fit-content;
-    gap: 10px;
-}
-
-#history-title{
-    color : #003366;
-    font-size: 20px;
-    text-align: center;
-    font-weight: bold;
-}
-
-#history-list{
-    display: flex;
-    flex-direction: column;
-    color: gray;
-    font-size: 13px;
-}
-.history-separator{
-    border-top: 0.5px solid gray;
-    width: 100%;
-    align-self: center;
-}
-.history-item{
-    height: 24px;
-    color: gray;
-    padding: 7px 0px;
-    font-size: 13px;
-    align-content: center;
-    padding-left: 10px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.history-item:hover{
-    background-color : #00336632;
 }
 
 table thead tr th {
@@ -280,3 +224,211 @@ tr:not(#head-row){
 
 #results-list .rank, #results-list .score { width: 10%; min-width:70px; text-align:center; }
 #results-list .page { width: 80%; min-width:250px; padding-left: 20px;}
+
+/* Keywords */
+#keywords-list{
+    display:flex;
+    flex-direction: column;
+    gap: 20px;
+}
+#keywords-header{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#keywords{
+    padding-bottom: 20px;
+    margin: none;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    box-sizing: border-box;
+}
+#keywords-header button{
+    border-radius: 35px;
+    height: 35px;
+    width: 35px;
+    color: #003366;
+    border: none;
+    box-sizing: border-box;
+    font-size: 13px;
+    font-weight: bold;
+    background-color: white;
+    box-shadow: 0px 1px 2px #80808088;
+}
+
+#keywords-header button:hover{
+    border-radius: 35px;
+    height: 35px;
+    width: 35px;
+    color: white;
+    border: none;
+    box-sizing: border-box;
+    font-size: 13px;
+    font-weight: bold;
+    background-color: #0033666f;
+    box-shadow: 0px 1px 2px #80808088;
+}
+
+#keywords-header button.active{
+    border-radius: 35px;
+    height: 35px;
+    width: 35px;
+    color: white;
+    border: none;
+    box-sizing: border-box;
+    font-size: 13px;
+    font-weight: bold;
+    background-color: #003366;
+    box-shadow: 0px 1px 2px #80808088;
+}
+
+button.keyword-item{
+    border-radius: 40px;
+    height: 40px;
+    min-width: 60px;
+    color: gray;
+    padding: 0px 10px 0px 10px;
+    box-sizing: border-box;
+    border: none;
+    font-size: 13px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #fafafa;
+    box-shadow: 0px 1px 2px #80808088;
+}
+
+button.keyword-item:hover{
+    color: white;
+    border: none;
+    background-color: #505050;
+}
+
+/* Bonus Part */
+#bonus{
+    width: 20%;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* History */
+
+#history{
+    width: 100%;
+    border: 1px solid #003366;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border-radius: 25px;
+    padding: 20px;
+    flex: 0 0 auto;
+    height: fit-content;
+    gap: 10px;
+}
+
+#history-title{
+    color : #003366;
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+
+#history-list{
+    display: flex;
+    flex-direction: column;
+    color: gray;
+    font-size: 13px;
+}
+.history-separator{
+    border-top: 0.5px solid gray;
+    width: 100%;
+    align-self: center;
+}
+.history-item{
+    height: 24px;
+    color: gray;
+    padding: 7px 0px;
+    font-size: 13px;
+    align-content: center;
+    padding-left: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.history-item:hover{
+    background-color : #00336632;
+}
+
+/* Index */
+/* Index Container */
+#index{
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+button.index-item{
+    border-radius: 40px;
+    height: 40px;
+    min-width: 60px;
+    color: gray;
+    padding: 0px 10px 0px 15px;
+    box-sizing: border-box;
+    border: none;
+    font-size: 13px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background-color: #fafafa;
+    box-shadow: 0px 1px 2px #80808088;
+}
+
+button.index-item span{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: no-wrap;
+}
+
+
+/* Index Button*/
+button.index-button{
+    align-self: center;
+    justify-self: center;
+    width : 80%;
+    border-radius: 15px;
+    height: 40px;
+    color: white;
+    border: none;
+    background-color: #003366;
+}
+
+#viewIndex{
+    color: white;
+    background-color: #003366;
+}
+
+#viewIndex:hover{
+    color: white;
+    background-color: #004788;
+}
+#hideIndex{
+    color: white;
+    background-color: #7a7a7a;
+}
+#hideIndex:hover{
+    color: white;
+    background-color: #adadad;
+}
+

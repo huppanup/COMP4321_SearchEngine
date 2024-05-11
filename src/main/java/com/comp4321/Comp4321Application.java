@@ -14,7 +14,7 @@ import java.util.TreeSet;
 @SpringBootApplication
 @RestController
 public class Comp4321Application {
-
+	static TreeMap<String, TreeSet<String>> wordDict;
 	public static void main(String[] args) {
 		System.out.println("Crawling...");
 		try{
@@ -22,7 +22,7 @@ public class Comp4321Application {
 					"https://www.cse.ust.hk/~kwtleung/COMP4321/testpage.htm",
 					300,
 					"stopwords.txt");
-			TreeMap<String, TreeSet<String>> wordDict = crawler.crawl();
+			wordDict = crawler.crawl();
 		}catch(Exception e){
 			System.out.println(e);
 		}
@@ -45,6 +45,20 @@ public class Comp4321Application {
 			HashMap<Integer, HashMap<String, String>> result =
 					SearchResult.getResults(score.score(query.substring(1, query.length() - 1)));
 			return ResponseEntity.ok(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			HashMap<String, String> result = new HashMap<>();
+			result.put("success","false");
+			return ResponseEntity.ok(result);
+		}
+	}
+
+	@GetMapping("/keywords")
+	@ResponseBody
+	public ResponseEntity<?> getKeywords(){
+		System.out.println("Retrieving keywords");
+		try {
+			return ResponseEntity.ok(wordDict);
 		} catch (Exception e) {
 			e.printStackTrace();
 			HashMap<String, String> result = new HashMap<>();

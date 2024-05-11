@@ -1,4 +1,62 @@
 
+let keywords;
+
+$(document).ready(function() {
+
+    $('input[type="text"]').on('focus', function() {
+        $(this).select();
+    });
+
+    getKeywords().then(() => {
+        setKeywordsHeader();
+    });
+});
+
+function setKeywordsHeader(){
+    for(let startChar in keywords){
+        $("#keywords-header").append(`<button id="${startChar}">${startChar}</button>`);
+        $(`#${startChar}`).on('click', function() {
+            $("#keywords-header button").removeClass("active");
+            $(`#${startChar}`).addClass("active");
+            showKeywords(startChar);
+        });
+    }
+}
+
+function showKeywords(startChar){
+    $('#keywords').html("");
+    for(const keyword of keywords[startChar]){
+        $('#keywords').append(`<button class="keyword-item">${keyword}</button>`);
+    }
+    $(`.keyword-item`).on('click', function() {
+        addIndex($(this).html());
+    });
+
+}
+
+function addIndex(index){
+    if ($("#index").children().length == 5){
+        removeIndex($("#index").children().first());
+    }
+    if ($(`#index-${index}`).length) return;
+    $('#index').append(`
+    <button id="index-${index}" class="index-item"><span>${index}</span><img height="17px" src="cross.svg"></button>
+    `);
+    $(`#index-${index}`).on('click', e => removeIndex($(`#index-${index}`)));
+}
+
+function removeIndex(target){
+    target.off('click');
+    target.remove();
+}
+
+async function getKeywords(){
+    keywords = await fetch('/keywords')
+        .then(response => { return response.json();})
+        .then(data => { return data })
+        .catch(error => { console.error(error) });
+}
+
 const HistoryQueue = (function(){
     const max = 20;
 
@@ -20,8 +78,15 @@ const HistoryQueue = (function(){
 })();
 
 async function search(query){
-    if (query.length === 0) return;
-    HistoryQueue.addHistory(query);
+    if (query.length === 0 && $("#index").children().length == 0) return;
+    if (query.length !== 0) HistoryQueue.addHistory(query);
+    if ($("#index").children().length > 0){
+        var values = $('#index button.index-item').map(function() {
+            return $(this).find('span').text();
+        }).get();
+        query += " " + values.join(' ');
+    }
+    query.trim();
     $("#results-list").show();
     $("#keywords-list").hide();
     const result = await fetch('/search', {
@@ -68,11 +133,7 @@ function parsePageInfo(pageInfo){
     return pageString;
 }
 
-$(document).ready(function() {
-    $('input[type="text"]').on('focus', function() {
-        $(this).select();
-    });
-});
+
 
 $(".title-header img").on("click", (e) => {
     $(".header").fadeOut(300);
@@ -85,9 +146,9 @@ $(".title-header img").on("click", (e) => {
 
 $("#history-list").on("click", ".history-item", (e) => {
     const query = $(e.target).attr("value").trim();
-    console.log("Searching from history");
     $('#search-query-header').val(query);
     search(query).then(result => {
+        if (!result) return;
         if ("success" in result){console.log("Error while searching."); return;}
         $("tbody").html("");
         for (rank in result){
@@ -103,10 +164,21 @@ $("#history-list").on("click", ".history-item", (e) => {
     }).catch(error => { console.error(error) });
 })
 
-$("#wordList").on("click", (e) => {
-    $("#results-list").toggle();
-    $("#keywords-list").toggle();
+$("#viewIndex").on("click", (e) => {
+    $("#viewIndex").hide();
+    $("#results-list").hide();
+    $("#keywords-list").show();
+    $("#hideIndex").show();
+});
+
+$("#hideIndex").on("click", (e) => {
+    $("#hideIndex").hide()
+    $("#results-list").show();
+    $("#keywords-list").hide();
+    $("#viewIndex").show();
+
 })
+
 
 $("#search-bar").on("submit", (e) => {
     // Do not submit the form
@@ -121,6 +193,7 @@ $("#search-bar").on("submit", (e) => {
     const query = $("#search-query").val().trim();
 
     search(query).then(result =>{
+        if (!result) return;
         if ("success" in result){console.log("Error while searching."); return;}
         $("tbody").html("");
         for (rank in result){
@@ -134,13 +207,13 @@ $("#search-bar").on("submit", (e) => {
         `   );
         }
     });
-    console.log(query);
 });
 
 $("#search-bar-header").on("submit", (e) => {
     e.preventDefault();
     const query = $("#search-query-header").val().trim();
     search(query).then(result => {
+        if (!result) return;
         if ("success" in result){console.log("Error while searching."); return;}
         $("tbody").html("");
         for (rank in result){

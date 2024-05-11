@@ -21,17 +21,19 @@
 </div>
 <div id='results' style='display:none;'>
     <div id="results-container">
-        <table id="results-list">
-            <thead>
-            <tr id="head-row">
-                <th class="rank">Rank</th>
-                <th class="score">Score</th>
-                <th class="page">Page</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+        <div id="results-search">
+            <table id="results-list">
+                <thead>
+                <tr id="head-row">
+                    <th class="rank">Rank</th>
+                    <th class="score">Score</th>
+                    <th class="page">Page</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
         <div id="keywords-list" style="display:none">
             <div id="keywords-header"></div>
             <div id="keywords"></div>
@@ -42,7 +44,11 @@
             <div id="history-title">History</div>
             <div id="history-list"></div>
         </div>
-        <button id="wordList">View Index</button>
+        <div id="index">
+        </div>
+        <button class="index-button" id="viewIndex">View Index</button>
+        <button class="index-button" id="hideIndex" style="display:none">Hide Index</button>
+
     </div>
 </div>
 </div>
