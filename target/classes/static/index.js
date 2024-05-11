@@ -20,6 +20,7 @@ const HistoryQueue = (function(){
 })();
 
 async function search(query){
+    if (query.length === 0) return;
     HistoryQueue.addHistory(query);
     $("#results-list").show();
     $("#keywords-list").hide();
@@ -71,6 +72,15 @@ $(document).ready(function() {
     $('input[type="text"]').on('focus', function() {
         $(this).select();
     });
+});
+
+$(".title-header img").on("click", (e) => {
+    $(".header").fadeOut(300);
+    $("#results").fadeOut(300);
+    setTimeout(() => {
+        $(".landing").fadeIn(300);
+    }, 300);
+
 });
 
 $("#history-list").on("click", ".history-item", (e) => {

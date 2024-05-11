@@ -62,6 +62,18 @@ public class DocumentDB {
         else return -1;
     }
 
+    public TreeMap<String, TreeSet<String>> getIndexes() throws Exception {
+        TreeMap<String, TreeSet<String>> wordDict = new TreeMap<>();
+        BTree wordToID = BTree.load(dbm, dbm.getNamedObject("WordToID"));
+        TupleBrowser browser = wordToID.browse();
+        Tuple rec = new Tuple();
+        while (browser.getNext(rec)) {
+            String word = (String) rec.getKey();
+            if (wordDict.get(word.substring(0,1)) == null) wordDict.put(word.substring(0,1), new TreeSet<>());
+            wordDict.get(word.substring(0,1)).add(word);
+        }
+        return wordDict;
+    }
     public BTree getTable(String tableName) throws Exception{
         return BTree.load(dbm, dbm.getNamedObject(tableName));
     }

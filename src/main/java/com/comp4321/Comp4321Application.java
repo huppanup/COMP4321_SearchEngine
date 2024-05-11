@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 @SpringBootApplication
 @RestController
@@ -20,7 +22,7 @@ public class Comp4321Application {
 					"https://www.cse.ust.hk/~kwtleung/COMP4321/testpage.htm",
 					300,
 					"stopwords.txt");
-			crawler.crawl();
+			TreeMap<String, TreeSet<String>> wordDict = crawler.crawl();
 		}catch(Exception e){
 			System.out.println(e);
 		}

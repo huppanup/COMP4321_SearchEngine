@@ -188,19 +188,21 @@ public class Crawler
 		this.maxIter--;
 	}
 
-	public void crawl() throws Exception {
+	public TreeMap<String, TreeSet<String>> crawl(){
 		try {
 			boolean updated = false;
 			for (int i = 0; urlQueue.size() > i && maxIter != 0; i++) {
 				this.fetchPage(this.urlQueue.get(i));
 				if (i > 0) updated = true;
 			}
+			TreeMap<String, TreeSet<String>> wordDict = db.getIndexes();
 			db.closeDB();
 			if (updated) score.calculateWeights();
+			return wordDict;
 		} catch (Exception e) {
-			db.closeDB();
 			e.printStackTrace ();
 		}
+		return null;
 	}
 }
 
