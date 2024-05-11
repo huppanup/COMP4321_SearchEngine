@@ -52,7 +52,7 @@ public class SearchResult {
             int count = 0;
             for (Map.Entry<String, Integer> wordFreqEntry : wordList) {
                 if (count >= 5) { break; }
-                keywords += wordFreqEntry.getKey() + " " + entry.getValue() + ", ";
+                keywords += wordFreqEntry.getKey() + " " + wordFreqEntry.getValue() + ", ";
                 count++;
             }
             if (keywords.length() > 2) { keywords = keywords.substring(0, keywords.length() - 2);}
@@ -74,7 +74,6 @@ public class SearchResult {
             // Get Child URL
             String childURLString = "";
             Vector<String> childLinks = (Vector<String>) ParentToChild.find(id);
-            System.out.println(childLinks.toString());
             for(String child: childLinks){
                 childURLString += child + ", ";
             }

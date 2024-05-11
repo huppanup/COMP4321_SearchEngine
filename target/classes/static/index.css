@@ -105,6 +105,27 @@ input[type="submit"]:hover{
     box-sizing: border-box;
 }
 
+/* Page Info */
+.page-title{
+    color : #003366;
+    font-weight : bold;
+    font-size : 20px;
+    text-decoration: none;
+    display: block;
+}
+
+.page-title-sub{
+    color : #003366;
+    font-weight : bold;
+}
+
+.page-links{
+    line-height: 18px;
+}
+
+.page-keywords, .page-links{
+    color: black
+}
 
 /* Table Stuff */
 
@@ -112,10 +133,59 @@ input[type="submit"]:hover{
     width: 100%; height: 85%;
     margin: none;
     display:flex;
-    flex-direction:column;
+    flex-direction:row;
     gap: 30px;
     overflow-y: scroll;
     flex: 1;
+}
+
+#history{
+    width: 15%;
+    border: 1px solid #003366;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    border-radius: 25px;
+    padding: 20px;
+    flex: 0 0 auto;
+    height: fit-content;
+    gap: 10px;
+    position: sticky;
+    top: 0px;
+}
+
+#history-title{
+    color : #003366;
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#history-list{
+    display: flex;
+    flex-direction: column;
+    color: gray;
+    font-size: 13px;
+}
+.history-separator{
+    border-top: 0.5px solid gray;
+    width: 100%;
+    align-self: center;
+}
+.history-item{
+    height: 24px;
+    color: gray;
+    padding: 7px 0px;
+    font-size: 13px;
+    align-content: center;
+    padding-left: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.history-item:hover{
+    background-color : #00336632;
 }
 
 table thead tr th {
@@ -123,6 +193,7 @@ table thead tr th {
     background-color: white;
     top: 0;
     color: #003366;
+    font-weight: normal;
 }
 
 #results-list {
@@ -135,7 +206,6 @@ tr {
     display: flex;
     width: 100%;
     box-sizing: border-box;
-
     border-bottom: 1px solid #003366;
 
 }
@@ -146,9 +216,11 @@ tr:not(#head-row){
 
 #results-list tr th {
     text-align: center;
-    color: black;
     line-height: 2rem;
     padding: 0px;
+}
+#results-list tr th:not(.page) {
+    width: 15%;
 }
 
 #results-list tr th.page {
@@ -168,12 +240,16 @@ tr:not(#head-row){
 }
 
 #results-list td:not(.page) {
-    color: gray;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     line-height: 2rem;
     padding-left: 0px;
     padding-right: 0px;
-    padding-bottom: 5px;
-    padding-top: 5px;
+    padding-bottom: 10px;
+    width:15%;
+    padding-top: 10px;
     font-size: 13px;
     border-right: 1px solid #003366;
 }
