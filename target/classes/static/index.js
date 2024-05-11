@@ -21,6 +21,8 @@ const HistoryQueue = (function(){
 
 async function search(query){
     HistoryQueue.addHistory(query);
+    $("#results-list").show();
+    $("#keywords-list").hide();
     const result = await fetch('/search', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -52,7 +54,7 @@ function parsePageInfo(pageInfo){
         <span>Last Modified : ${pageInfo.mod_date.substring(0, 10)}, </span>
         <span>Page Size : ${pageInfo.size}</span>
     </div>
-    <div class="page-keywords">${pageInfo.keywords}</div>
+    <div class="page-keywords">Keywords : ${pageInfo.keywords}</div>
     <div class="page-parent">
         <div class="page-title-sub">Parent Links</div>
         <div class="page-links">${parentHTML}</div>
@@ -89,6 +91,11 @@ $("#history-list").on("click", ".history-item", (e) => {
         `   );
         }
     }).catch(error => { console.error(error) });
+})
+
+$("#wordList").on("click", (e) => {
+    $("#results-list").toggle();
+    $("#keywords-list").toggle();
 })
 
 $("#search-bar").on("submit", (e) => {
